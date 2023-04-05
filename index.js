@@ -1,36 +1,43 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const render = require('./lib/shape.js');
+const { generateSvg } = require('./lib/shape.js');
 
-inquirer
-  .prompt([
-    {
-      name: 'text',
-      message: 'Enter up to three characters:',
-      validate: input => input.length <= 3,
+
+const prompts = [
+  {
+    type: 'input',
+    name: 'text',
+    message: 'Enter up to three characters:',
+    validate: (input) => {
+      if (input.length > 3) {
+        return 'Please enter up to three characters';
+      }
+      return true;
     },
-    {
-      name: 'textColor',
-      message: 'Enter text color (name or hex):',
-      default: 'black',
-    },
-    {
-      name: 'shape',
-      message: 'Choose a shape:',
-      type: 'list',
-      choices: ['circle', 'triangle', 'square'],
-    },
-    {
-      name: 'shapeColor',
-      message: 'Enter shape color (name or hex):',
-      default: 'white',
-    },
-  ])
-  .then(answers => {
-    const svg = render(answers.text, answers.textColor, answers.shape, answers.shapeColor);
-    fs.writeFileSync('logo.svg', svg);
+  },
+  {
+    type: 'input',
+    name: 'textColor',
+    message: 'Enter text color:',
+  },
+  {
+    type: 'list',
+    name: 'shape',
+    message: 'Choose a shape:',
+    choices: ['circle', 'triangle', 'square'],
+  },
+  {
+    type: 'input',
+    name: 'shapeColor',
+    message: 'Enter shape color:',
+  },
+];
+
+inquirer.prompt(prompts).then((answers) => {
+  const svg = generateSvg(answers.text, answers.textColor, answers.shape, answers.shapeColor);
+  fs.writeFile('./examples/logo.svg', svg, (err) => {
+    if (err) throw err;
     console.log('Generated logo.svg');
-  })
-  .catch(error => {
-    console.log(error);
   });
+});
