@@ -25,3 +25,7 @@ Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
+
+## Video link
+
+https://drive.google.com/file/d/1tCWWhuQsmZe2qllIDpLjwBhCeUxTM8xE/view?usp=sharing
